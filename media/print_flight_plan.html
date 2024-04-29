@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Print Flight Plan</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  body {
+    padding: 20px;
+  }
+  .container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  h2 {
+    text-align: center;
+  }
+  .flight-plan-data {
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Flight Plan Details</h2>
+
+  <div class="flight-plan-data" id="flightPlanData"></div>
+
+  <button onclick="printFlightPlan()" class="btn btn-primary">Print Flight Plan</button>
+</div>
+
+<script src="./script/print_flight_plan_script.js"></script>
+
+</body>
+</html>
