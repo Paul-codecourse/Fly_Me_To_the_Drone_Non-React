@@ -10,6 +10,11 @@
     background: linear-gradient(to bottom, #add8e6, #00008b);
     color: #00008b; /* Dark blue text */
     padding: 20px;
+    border-right: 1px solid #dee2e6;
+  }
+  .sidebar-btn {
+    margin-bottom: 10px;
+    width: 100%;
   }
   .container {
     background-color: rgba(255, 255, 255, 0.8);
@@ -19,9 +24,17 @@
 </style>
 </head>
 <body>
+<!-- Navigation Section (Sidebar) -->
+<div id="sidebar">
+  <button class="btn btn-primary sidebar-btn" onclick="window.location.href='flight_plan.html'">Flight Plan</button>
+  <button class="btn btn-primary sidebar-btn" onclick="window.location.href='print_flight_plan.html'">Print Flight Plan</button>
+</div>
 
+<!-- Main Content Section -->
+<div id="main">
 <div class="container">
-  <h2>Enter Data and Save to Local Storage</h2>
+    <h1>Fly me to the Drone App</h1>
+  <h2>Template to Enter Data and Save to Local Storage</h2>
 
   <form id="dataForm">
     <div class="form-group">
