@@ -53,3 +53,18 @@ function createFlightPlanClickHandler(flightPlan) {
         document.getElementById("flightPlanData").innerHTML = flightPlanHTML;
     };
 }
+
+function emailFlightPlan() {
+  const flightPlanContent = document.getElementById('flightPlanData').innerHTML;
+
+  // Convert HTML content to plain text (if necessary, you can use libraries like `html-to-text`)
+  const plainTextContent = flightPlanContent.replace(/<[^>]+>/g, ''); // Remove HTML tags
+
+  // Create the mailto link
+  const subject = "Flight Plan Details";
+  const body = encodeURIComponent(plainTextContent);
+  const mailtoLink = `mailto:?subject=${subject}&body=${body}`;
+
+  // Open the user's email client with the pre-filled content
+  window.location.href = mailtoLink;
+}

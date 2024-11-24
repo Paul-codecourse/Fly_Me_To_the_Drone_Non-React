@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flight Plan Manager</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="./css/style.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to bottom, #add8e6, #00008b);
+      color: #00008b; /* Dark blue text */
+      padding: 20px;
+    }
+    .container {
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+    }
+    #flightPlanDetails {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      display: none; /* Initially hidden */
+    }
+    .form-section {
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div id="sidebar">
+    <button class="btn btn-primary sidebar-btn" onclick="window.location.href='flight_plan.html'">Flight Plans</button>
+    <button class="btn btn-primary sidebar-btn" onclick="window.location.href='print_flight_plan.html'">Print Flight Plan</button>
+  </div>
+
+  <div class="container">
+    <h2>Enter Flight Plan Data</h2>
+
+    <!-- Button to toggle the form visibility -->
+    <button class="btn btn-secondary" id="toggleFormBtn" onclick="toggleFormVisibility()">Show/Hide Flight Plan Form</button>
+
+    <div id="flightPlanFormContainer" class="form-section">
+      <form id="flightPlanForm">
+        <div class="form-group">
+          <label for="date">Date:</label>
+          <input type="text" class="form-control" id="date" name="date"><br>
+
+          <label for="time">Time:</label>
+          <input type="text" class="form-control" id="time" name="time"><br>
+
+          <label for="location">Location:</label>
+          <input type="text" class="form-control" id="location" name="location"><br>
+
+          <label for="windSpeed">Wind Speed:</label>
+          <input type="text" class="form-control" id="windSpeed" name="windSpeed"><br>
+
+          <label for="gusts">Gusts:</label>
+          <input type="text" class="form-control" id="gusts" name="gusts"><br>
+
+          <label for="precipitation">Precipitation:</label>
+          <input type="text" class="form-control" id="precipitation" name="precipitation"><br>
+
+          <label for="notams">NOTAMS:</label>
+          <input type="text" class="form-control" id="notams" name="notams"><br>
+
+          <label for="temperature">Temperature:</label>
+          <input type="text" class="form-control" id="temperature" name="temperature"><br>
+
+          <label for="airspace">Airspace:</label>
+          <input type="text" class="form-control" id="airspace" name="airspace"><br>
+
+          <label for="airport">Airport:</label>
+          <input type="text" class="form-control" id="airport" name="airport"><br>
+
+          <label for="visibility">Visibility:</label>
+          <input type="text" class="form-control" id="visibility" name="visibility"><br>
+
+          <label for="groundRestrictions">Ground Restrictions:</label>
+          <input type="text" class="form-control" id="groundRestrictions" name="groundRestrictions"><br>
+        </div>
+
+        <button type="button" onclick="saveFlightPlanData()" class="btn btn-primary">Save Flight Plan Data</button>
+      </form>
+    </div>
+
+    <hr>
+
+    <h3>Stored Flight Plans</h3>
+
+    <div id="flightPlanButtons">
+      <!-- Buttons for storing flight plans (1-10) will be dynamically added here -->
+    </div>
+
+    <button onclick="deleteFlightPlan()" class="btn btn-danger">Delete Flight Plan</button>
+    <button onclick="deleteAllFlightPlans()" class="btn btn-danger">Delete All Flight Plans</button>
+
+    <div id="flightPlanDetails">
+      <h4>Flight Plan Details</h4>
+      <div id="flightPlanContent"></div>
+    </div>
+  </div>
+
+  <script>
+    // Function to toggle the visibility of the flight plan form
+    function toggleFormVisibility() {
+      const formContainer = document.getElementById('flightPlanFormContainer');
+      const formButton = document.getElementById('toggleFormBtn');
+
+      // Toggle the display of the form
+      if (formContainer.style.display === 'none' || formContainer.style.display === '') {
+        formContainer.style.display = 'block';
+        formButton.textContent = 'Hide Flight Plan Form';
+      } else {
+        formContainer.style.display = 'none';
+        formButton.textContent = 'Show Flight Plan Form';
+      }
+    }
+
+    // Function to save flight plan data into local storage when clicking save
+    function saveFlightPlanData() {
+      const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
+      const location = document.getElementById('location').value;
+      const windSpeed = document.getElementById('windSpeed').value;
+      const gusts = document.getElementById('gusts').value;
+      const precipitation = document.getElementById('precipitation').value;
+      const notams = document.getElementById('notams').value;
+      const temperature = document.getElementById('temperature').value;
+      const airspace = document.getElementById('airspace').value;
+      const airport = document.getElementById('airport').value;
+      const visibility = document.getElementById('visibility').value;
+      const groundRestrictions = document.getElementById('groundRestrictions').value;
+
+      const flightPlan = {
+        date,
+        time,
+        location,
+        windSpeed,
+        gusts,
+        precipitation,
+        notams,
+        temperature,
+        airspace,
+        airport,
+        visibility,
+        groundRestrictions
+      };
+
+      for (let i = 1; i <= 10; i++) {
+        const buttonName = `Stored Flight Plan ${i}`;
+        const storedData = localStorage.getItem(buttonName);
+
+        if (!storedData) {
+          localStorage.setItem(buttonName, JSON.stringify(flightPlan));
+
+          const button = document.getElementById(`flightPlanButton${i}`);
+          if (button) {
+            button.textContent = `Flight Plan ${i}: ${date} - ${location}`;
+            button.style.backgroundColor = '#add8e6';  
+            button.style.color = '#000';  
+          }
+
+          alert('Flight Plan Data Saved!');
+          loadStoredFlightPlans();
+          return;
+        }
+      }
+
+      alert('No available slots for saving a new flight plan.');
+    }
+
+    // Function to load stored flight plans as buttons (1-10)
+    function loadStoredFlightPlans() {
+      const flightPlanButtonsDiv = document.getElementById('flightPlanButtons');
+      flightPlanButtonsDiv.innerHTML = '';
+
+      for (let i = 1; i <= 10; i++) {
+        const button = document.createElement('button');
+        button.id = `flightPlanButton${i}`;
+        button.classList.add('btn', 'btn-secondary', 'm-2');
+        button.textContent = `Stored Flight Plan ${i}`;
+
+        const flightPlanData = JSON.parse(localStorage.getItem(`Stored Flight Plan ${i}`));
+        if (flightPlanData) {
+          button.style.backgroundColor = '#add8e6';  
+          button.style.color = '#000';  
+
+          button.textContent = `Flight Plan ${i}: ${flightPlanData.date} - ${flightPlanData.location}`;
+
+          button.onclick = function() {
+            displayFlightPlanData(flightPlanData, i); 
+          };
+        } else {
+          button.style.backgroundColor = '#6c757d';  
+          button.style.color = '#fff';  
+
+          button.onclick = function() {
+            alert(`No data saved for Flight Plan ${i}`);
+          };
+        }
+
+        flightPlanButtonsDiv.appendChild(button);
+      }
+    }
+
+    // Function to display the data of a selected flight plan
+    function displayFlightPlanData(flightPlanData, flightPlanNumber) {
+      const flightPlanContent = `
+        <p><strong>Flight Plan ${flightPlanNumber}:</strong></p>
+        <p><strong>Date:</strong> ${flightPlanData.date}</p>
+        <p><strong>Time:</strong> ${flightPlanData.time}</p>
+        <p><strong>Location:</strong> ${flightPlanData.location}</p>
+        <p><strong>Wind Speed:</strong> ${flightPlanData.windSpeed}</p>
+        <p><strong>Gusts:</strong> ${flightPlanData.gusts}</p>
+        <p><strong>Precipitation:</strong> ${flightPlanData.precipitation}</p>
+        <p><strong>NOTAMS:</strong> ${flightPlanData.notams}</p>
+        <p><strong>Temperature:</strong> ${flightPlanData.temperature}</p>
+        <p><strong>Airspace:</strong> ${flightPlanData.airspace}</p>
+        <p><strong>Airport:</strong> ${flightPlanData.airport}</p>
+        <p><strong>Visibility:</strong> ${flightPlanData.visibility}</p>
+        <p><strong>Ground Restrictions:</strong> ${flightPlanData.groundRestrictions}</p>
+      `;
+
+      const flightPlanDetailsDiv = document.getElementById('flightPlanDetails');
+      document.getElementById('flightPlanContent').innerHTML = flightPlanContent;
+      flightPlanDetailsDiv.style.display = 'block'; 
+    }
+
+    // Function to delete a specific flight plan
+    function deleteFlightPlan() {
+      const flightPlanNumber = prompt('Enter flight plan number to delete (1-10):');
+      if (flightPlanNumber >= 1 && flightPlanNumber <= 10) {
+        const button = document.getElementById(`flightPlanButton${flightPlanNumber}`);
+        if (button) {
+          const buttonName = `Stored Flight Plan ${flightPlanNumber}`;
+          localStorage.removeItem(buttonName);
+
+          button.style.backgroundColor = '#6c757d'; 
+          button.style.color = '#fff'; 
+          button.textContent = `Stored Flight Plan ${flightPlanNumber}`;
+
+          alert(`Flight Plan ${flightPlanNumber} deleted!`);
+        }
+      } else {
+        alert("Invalid flight plan number!");
+      }
+    }
+
+    // Function to delete all flight plans
+    function deleteAllFlightPlans() {
+      for (let i = 1; i <= 10; i++) {
+        const buttonName = `Stored Flight Plan ${i}`;
+        localStorage.removeItem(buttonName);
+
+        const button = document.getElementById(`flightPlanButton${i}`);
+        if (button) {
+          button.style.backgroundColor = '#6c757d'; 
+          button.style.color = '#fff'; 
+          button.textContent = `Stored Flight Plan ${i}`;
+        }
+      }
+
+      alert('All Flight Plans have been deleted!');
+    }
+
+    window.onload = function() {
+      loadStoredFlightPlans();
+    }
+  </script>
+</body>
+</html>

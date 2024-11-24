@@ -27,7 +27,19 @@ function saveFlightPlanData() {
       visibility: visibility,
       groundRestrictions: groundRestrictions
     };
-  
+          // Assuming your flight plan data is dynamically loaded into the 'flightPlanData' div
+    function printFlightPlan() {
+      const flightPlanContent = document.getElementById('flightPlanData').innerHTML;
+      const newWindow = window.open('', '', 'width=800,height=600');
+      newWindow.document.write('<html><head><title>Print Flight Plan</title></head><body>');
+      newWindow.document.write(flightPlanContent);
+      newWindow.document.write('</body></html>');
+      newWindow.document.close();
+      newWindow.print();
+    }
+
+
+
     // Convert the object to a JSON string
     var jsonData = JSON.stringify(flightPlanData);
   
