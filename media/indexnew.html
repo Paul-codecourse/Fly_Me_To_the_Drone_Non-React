@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Responsive Time Logger with Google Login</title>
   
-  <!-- Google OAuth Script -->
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <!--Include Google GSI script for OAuth sign in-->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+
 
   <!-- Include Bootstrap for Responsive Layout -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -66,6 +68,7 @@
   </style>
 </head>
 <body>
+  <div id="google-sign-in-button"></div>
 
   <div class="container text-center">
     <h1 class="mb-4">Responsive Time Logger</h1>
@@ -87,6 +90,7 @@
     <script>
       // Check if there's a saved time in local storage and display it
       window.onload = function() {
+        startApp(); // Initialise the Google Sign in functionality
         let savedTime = localStorage.getItem('savedTime');
         if (savedTime) {
           document.getElementById('time-display').innerHTML = "Last recorded time: " + savedTime;
@@ -142,9 +146,24 @@
         });
       }
 
-      window.onload = startApp;
+      
     </script>
   </div>
-
+  <script>
+    function handleCredentialResponse(response) {
+      console.log("Encoded JWT ID token: " + response.credential);
+    }
+  
+    window.onload = function() {
+      google.accounts.id.initialize({
+        client_id: '885962381131-9u4ped09spokr2vsedujetj9ls5as1g3.apps.googleusercontent.com',
+        callback: handleCredentialResponse
+      });
+      google.accounts.id.renderButton(
+        document.getElementById('google-sign-in-button'),
+        { theme: 'outline', size: 'large' }
+      );
+    }
+  </script>
 </body>
 </html>
