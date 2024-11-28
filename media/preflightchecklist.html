@@ -4,9 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Drone Preflight Checklist</title>
-  
+
   <!-- Include Google GSI script for OAuth sign-in -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <script src="https://apis.google.com/js/api.js" async defer></script>
 
   <style>
     body {
@@ -143,13 +145,6 @@
 </div>
 
 <script>
-  // Array with sample data of previous flights (for search functionality)
-  const previousFlights = [
-    { date: '2024-11-01', location: 'Park A', flightTime: '30 min' },
-    { date: '2024-10-28', location: 'Beach B', flightTime: '45 min' },
-    { date: '2024-10-15', location: 'Field C', flightTime: '60 min' },
-  ];
-
   let userName = '';
   let userEmail = '';
 
@@ -205,6 +200,13 @@
     }
   }
 
+  // Array with sample data of previous flights (for search functionality)
+  const previousFlights = [
+    { date: '2024-11-01', location: 'Park A', flightTime: '30 min' },
+    { date: '2024-10-28', location: 'Beach B', flightTime: '45 min' },
+    { date: '2024-10-15', location: 'Field C', flightTime: '60 min' },
+  ];
+
   // Start the flight once all checklist items are ticked
   document.getElementById('start-flight').addEventListener('click', () => {
     const checkboxes = document.querySelectorAll('.checklist-item input');
@@ -218,7 +220,12 @@
     }
   });
 
-  window.onload = startApp;
+  // Wait until the API is loaded before executing the app
+  window.onload = function() {
+    if (gapi) {
+      startApp();
+    }
+  };
 </script>
 
 </body>
