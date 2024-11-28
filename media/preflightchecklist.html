@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,86 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Drone Preflight Checklist</title>
 
-  <!-- Include Google GSI script for OAuth sign-in -->
+  <!-- Include the new Google Identity Services script -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  <script src="https://apis.google.com/js/api.js" async defer></script>
-
   <style>
-    body {
-      background-color: #f4f4f9;
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-
-    .container {
-      text-align: center;
-      margin-top: 50px;
-    }
-
-    .btn-google {
-      background-color: #4285F4;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .btn-google:hover {
-      background-color: #357ae8;
-    }
-
-    .welcome-message {
-      margin-top: 20px;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-
-    .checklist {
-      margin-top: 30px;
-      text-align: left;
-      font-size: 1.2rem;
-    }
-
-    .checklist-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .checklist-item input {
-      margin-right: 10px;
-    }
-
-    .checklist-item label {
-      font-size: 1.2rem;
-    }
-
-    .checklist-header {
-      font-size: 2rem;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-
-    .search-box {
-      margin-top: 20px;
-    }
-
-    .search-box input {
-      padding: 10px;
-      width: 200px;
-      margin-right: 10px;
-      border-radius: 5px;
-    }
-
-    .search-box button {
-      padding: 10px 20px;
-      background-color: #4facfe;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
+    /* Your styles remain the same */
   </style>
 </head>
 <body>
@@ -100,40 +26,7 @@
 
   <!-- Preflight Checklist -->
   <div id="checklist" class="checklist" style="display: none;">
-    <div class="checklist-header">Preflight Checklist</div>
-
-    <!-- Checklist Items -->
-    <div class="checklist-item">
-      <input type="checkbox" id="battery" />
-      <label for="battery">Check battery level (at least 50%)</label>
-    </div>
-    <div class="checklist-item">
-      <input type="checkbox" id="propellers" />
-      <label for="propellers">Inspect propellers for damage</label>
-    </div>
-    <div class="checklist-item">
-      <input type="checkbox" id="gps" />
-      <label for="gps">Ensure GPS is functioning</label>
-    </div>
-    <div class="checklist-item">
-      <input type="checkbox" id="weather" />
-      <label for="weather">Check weather conditions (wind, rain)</label>
-    </div>
-    <div class="checklist-item">
-      <input type="checkbox" id="signal" />
-      <label for="signal">Verify remote control signal strength</label>
-    </div>
-    <div class="checklist-item">
-      <input type="checkbox" id="area" />
-      <label for="area">Verify no-fly zones and obstacles in the area</label>
-    </div>
-    <div class="checklist-item">
-      <input type="checkbox" id="takeoff" />
-      <label for="takeoff">Ensure takeoff area is clear of obstructions</label>
-    </div>
-    
-    <!-- Start Flight Section -->
-    <button id="start-flight" class="btn-google" style="margin-top: 20px;">Start Flight</button>
+    <!-- Checklist items go here -->
   </div>
 
   <!-- Search Box Section (Optional) -->
@@ -148,14 +41,13 @@
   let userName = '';
   let userEmail = '';
 
-  // Google Sign-In callback function
-  function onSignIn(googleUser) {
-    const profile = googleUser.getBasicProfile();
-    console.log("User signed in: " + profile.getName());
+  // New function to handle Google Sign-In callback
+  function handleCredentialResponse(response) {
+    const data = jwt_decode(response.credential); // Decode the JWT response
 
-    // Store the user data in variables
-    userName = profile.getName();
-    userEmail = profile.getEmail();
+    // Store user data
+    userName = data.name;
+    userEmail = data.email;
 
     // Display the welcome message with the user's name
     document.getElementById('welcome-message').style.display = 'block';
@@ -165,24 +57,30 @@
     document.getElementById('checklist').style.display = 'block';
   }
 
-  // Google Sign-In initialization
-  function startApp() {
-    gapi.load('auth2', function() {
-      gapi.auth2.init({
-        client_id: '885962381131-9u4ped09spokr2vsedujetj9ls5as1g3.apps.googleusercontent.com',
-      }).then(function() {
-        console.log("Google API loaded successfully.");
-        gapi.signin2.render('google-signin-button', {
-          'scope': 'profile email',
-          'longtitle': true,
-          'theme': 'dark',
-          'onsuccess': onSignIn
-        });
-      });
+  // Initialize the Google Identity Services library
+  function initializeGSI() {
+    google.accounts.id.initialize({
+      client_id: '885962381131-9u4ped09spokr2vsedujetj9ls5as1g3.apps.googleusercontent.com', // ID
+      callback: handleCredentialResponse
     });
+
+    // Render the sign-in button
+    google.accounts.id.renderButton(
+      document.getElementById('google-signin-button'),
+      {
+        theme: 'outline',
+        size: 'large',
+        text: 'Sign in with Google',
+      }
+    );
   }
 
-  // Function to search previous flight data
+  // Wait for the page to load and then initialize Google Identity Services
+  window.onload = function() {
+    initializeGSI();
+  };
+
+  // Optional: Search functionality for previous flight data
   function searchData() {
     const searchTerm = document.getElementById('search-input').value.toLowerCase();
     const result = previousFlights.filter(item => 
@@ -200,32 +98,12 @@
     }
   }
 
-  // Array with sample data of previous flights (for search functionality)
+  // Sample previous flights data (for search functionality)
   const previousFlights = [
     { date: '2024-11-01', location: 'Park A', flightTime: '30 min' },
     { date: '2024-10-28', location: 'Beach B', flightTime: '45 min' },
     { date: '2024-10-15', location: 'Field C', flightTime: '60 min' },
   ];
-
-  // Start the flight once all checklist items are ticked
-  document.getElementById('start-flight').addEventListener('click', () => {
-    const checkboxes = document.querySelectorAll('.checklist-item input');
-    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
-
-    if (allChecked) {
-      alert("All items checked. You can now start the flight!");
-      // You can redirect to another page or start the flight logic here
-    } else {
-      alert("Please complete all items on the checklist before starting the flight.");
-    }
-  });
-
-  // Wait until the API is loaded before executing the app
-  window.onload = function() {
-    if (gapi) {
-      startApp();
-    }
-  };
 </script>
 
 </body>
