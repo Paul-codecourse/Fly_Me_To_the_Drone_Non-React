@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Responsive Time Logger with Google Login</title>
   
-  <!--Include Google GSI script for OAuth sign in-->
+  <!-- Include Google GSI script for OAuth sign in -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-
-
 
   <!-- Include Bootstrap for Responsive Layout -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -73,8 +71,7 @@
   <div class="container text-center">
     <h1 class="mb-4">Responsive Time Logger</h1>
 
-    <!-- Google Sign-In Button -->
-    <div id="google-signin-button"></div>
+    <!-- Google Sign-In Button will be rendered here -->
     
     <!-- Current Time Button and Display -->
     <button class="btn-custom" onclick="recordCurrentTime()">Record Current Time</button>
@@ -85,84 +82,71 @@
       <p id="user-name"></p>
       <p id="user-email"></p>
     </div>
+  </div>
 
-    <!-- Load Time from Local Storage -->
-    <script>
-      // Check if there's a saved time in local storage and display it
-      window.onload = function() {
-        startApp(); // Initialise the Google Sign in functionality
-        let savedTime = localStorage.getItem('savedTime');
-        if (savedTime) {
-          document.getElementById('time-display').innerHTML = "Last recorded time: " + savedTime;
+  <script>
+    // Check if there's a saved time in local storage and display it
+    window.onload = function() {
+      // Initialize Google Sign-In
+      startApp(); 
+
+      let savedTime = localStorage.getItem('savedTime');
+      if (savedTime) {
+        document.getElementById('time-display').innerHTML = "Last recorded time: " + savedTime;
+      }
+    }
+
+    // Function to fetch current time from API and store it in localStorage
+    async function recordCurrentTime() {
+      try {
+        // Fetch time from WorldTimeAPI
+        let response = await fetch('https://worldtimeapi.org/api/ip');
+        if (!response.ok) {
+          throw new Error("Failed to fetch time.");
         }
+        let data = await response.json();
+        
+        // Get the current time from the API response
+        let currentTime = data.datetime;
+
+        // Store the time in localStorage
+        localStorage.setItem('savedTime', currentTime);
+        
+        // Display the recorded time
+        document.getElementById('time-display').innerHTML = "Last recorded time: " + currentTime;
+      } catch (error) {
+        console.error('Error fetching time:', error);
+        document.getElementById('time-display').innerHTML = "Error fetching time. Please try again later.";
       }
+    }
 
-      // Function to fetch current time from API and store it in localStorage
-      async function recordCurrentTime() {
-        try {
-          // Fetch time from WorldTimeAPI
-          let response = await fetch('https://worldtimeapi.org/api/ip');
-          let data = await response.json();
-          
-          // Get the current time from the API response
-          let currentTime = data.datetime;
+    // Google Sign-In callback function
+    function onSignIn(googleUser) {
+      var profile = googleUser.getBasicProfile();
+      console.log("User signed in: " + profile.getName());
 
-          // Store the time in localStorage
-          localStorage.setItem('savedTime', currentTime);
-          
-          // Display the recorded time
-          document.getElementById('time-display').innerHTML = "Last recorded time: " + currentTime;
-        } catch (error) {
-          console.error('Error fetching time:', error);
-        }
-      }
+      // Display user info
+      document.getElementById('user-info').style.display = 'block';
+      document.getElementById('user-name').innerText = 'Name: ' + profile.getName();
+      document.getElementById('user-email').innerText = 'Email: ' + profile.getEmail();
+    }
 
-      // Google Sign-In callback function
-      function onSignIn(googleUser) {
-        var profile = googleUser.getBasicProfile();
-        console.log("User signed in: " + profile.getName());
-
-        // Display user info
-        document.getElementById('user-info').style.display = 'block';
-        document.getElementById('user-name').innerText = 'Name: ' + profile.getName();
-        document.getElementById('user-email').innerText = 'Email: ' + profile.getEmail();
-      }
-
-      // Google Sign-In initialization
-      function startApp() {
-        gapi.load('auth2', function() {
-          gapi.auth2.init({
-            client_id: '885962381131-9u4ped09spokr2vsedujetj9ls5as1g3.apps.googleusercontent.com', // Replace with your Google Client ID
-            cookiepolicy: 'none', // This needs to be a valid cookie policy and single_host_origin is probably required post development
-          }).then(function() {
-            console.log("Google API loaded successfully.");
-            gapi.signin2.render('google-signin-button', {
-              'scope': 'profile email',
-              'longtitle': true,
-              'theme': 'dark',
-              'onsuccess': onSignIn
-            });
+    // Google Sign-In initialization
+    function startApp() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init({
+          client_id: '885962381131-9u4ped09spokr2vsedujetj9ls5as1g3.apps.googleusercontent.com', // Replace with your Google Client ID
+          cookiepolicy: 'none',
+        }).then(function() {
+          console.log("Google API loaded successfully.");
+          gapi.signin2.render('google-sign-in-button', {
+            'scope': 'profile email',
+            'longtitle': true,
+            'theme': 'dark',
+            'onsuccess': onSignIn
           });
         });
-      }
-
-      
-    </script>
-  </div>
-  <script>
-    function handleCredentialResponse(response) {
-      console.log("Encoded JWT ID token: " + response.credential);
-    }
-  
-    window.onload = function() {
-      google.accounts.id.initialize({
-        client_id: '885962381131-9u4ped09spokr2vsedujetj9ls5as1g3.apps.googleusercontent.com',
-        callback: handleCredentialResponse
       });
-      google.accounts.id.renderButton(
-        document.getElementById('google-sign-in-button'),
-        { theme: 'outline', size: 'large' }
-      );
     }
   </script>
 </body>
