@@ -87,13 +87,31 @@
   <script>
     // Check if there's a saved time in local storage and display it
     window.onload = function() {
-      // Initialize Google Sign-In
-      startApp(); 
+      // Initialize Google Sign-In and load the API
+      loadGoogleAPI(); 
 
       let savedTime = localStorage.getItem('savedTime');
       if (savedTime) {
         document.getElementById('time-display').innerHTML = "Last recorded time: " + savedTime;
       }
+    }
+
+    // Function to load Google API
+    function loadGoogleAPI() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init({
+          client_id: '885962381131-9u4ped09spokr2vsedujetj9ls5as1g3.apps.googleusercontent.com', // Replace with your Google Client ID
+          cookiepolicy: 'none',
+        }).then(function() {
+          console.log("Google API loaded successfully.");
+          gapi.signin2.render('google-sign-in-button', {
+            'scope': 'profile email',
+            'longtitle': true,
+            'theme': 'dark',
+            'onsuccess': onSignIn
+          });
+        });
+      });
     }
 
     // Function to fetch current time from API and store it in localStorage
@@ -129,24 +147,6 @@
       document.getElementById('user-info').style.display = 'block';
       document.getElementById('user-name').innerText = 'Name: ' + profile.getName();
       document.getElementById('user-email').innerText = 'Email: ' + profile.getEmail();
-    }
-
-    // Google Sign-In initialization
-    function startApp() {
-      gapi.load('auth2', function() {
-        gapi.auth2.init({
-          client_id: '885962381131-9u4ped09spokr2vsedujetj9ls5as1g3.apps.googleusercontent.com', // Replace with your Google Client ID
-          cookiepolicy: 'none',
-        }).then(function() {
-          console.log("Google API loaded successfully.");
-          gapi.signin2.render('google-sign-in-button', {
-            'scope': 'profile email',
-            'longtitle': true,
-            'theme': 'dark',
-            'onsuccess': onSignIn
-          });
-        });
-      });
     }
   </script>
 </body>
