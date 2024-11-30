@@ -101,7 +101,7 @@
       async function recordCurrentTime() {
         try {
           // Fetch time from WorldTimeAPI
-          let response = await fetch('http://worldtimeapi.org/api/ip');
+          let response = await fetch('https://worldtimeapi.org/api/ip');
           let data = await response.json();
           
           // Get the current time from the API response
