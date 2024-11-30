@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Responsive Time Logger with Google Login</title>
   
-  <!-- Include Google GSI script for OAuth sign in -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-
   <!-- Include Bootstrap for Responsive Layout -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
@@ -85,33 +82,37 @@
   </div>
 
   <script>
+    // Function to load the Google API client library
+    function loadGoogleAPI() {
+      var script = document.createElement('script');
+      script.src = 'https://apis.google.com/js/platform.js';
+      script.onload = function() {
+        gapi.load('auth2', function() {
+          gapi.auth2.init({
+            client_id: '885962381131-9u4ped09spokr2vsedujetj9ls5as1g3.apps.googleusercontent.com', // Replace with your Google Client ID
+            cookiepolicy: 'none',
+          }).then(function() {
+            console.log("Google API loaded successfully.");
+            gapi.signin2.render('google-sign-in-button', {
+              'scope': 'profile email',
+              'longtitle': true,
+              'theme': 'dark',
+              'onsuccess': onSignIn
+            });
+          });
+        });
+      };
+      document.body.appendChild(script);
+    }
+
     // Check if there's a saved time in local storage and display it
     window.onload = function() {
-      // Initialize Google Sign-In and load the API
-      loadGoogleAPI(); 
+      loadGoogleAPI(); // Load the Google API and initialize it
 
       let savedTime = localStorage.getItem('savedTime');
       if (savedTime) {
         document.getElementById('time-display').innerHTML = "Last recorded time: " + savedTime;
       }
-    }
-
-    // Function to load Google API
-    function loadGoogleAPI() {
-      gapi.load('auth2', function() {
-        gapi.auth2.init({
-          client_id: '885962381131-9u4ped09spokr2vsedujetj9ls5as1g3.apps.googleusercontent.com', // Replace with your Google Client ID
-          cookiepolicy: 'none',
-        }).then(function() {
-          console.log("Google API loaded successfully.");
-          gapi.signin2.render('google-sign-in-button', {
-            'scope': 'profile email',
-            'longtitle': true,
-            'theme': 'dark',
-            'onsuccess': onSignIn
-          });
-        });
-      });
     }
 
     // Function to fetch current time from API and store it in localStorage
