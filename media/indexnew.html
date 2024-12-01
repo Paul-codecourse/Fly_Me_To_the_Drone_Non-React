@@ -85,7 +85,7 @@
       <p id="user-name"></p>
       <p id="user-email"></p>
     </div>
-
+    <div id="message"></div> <!-- For displaying the greeting message -->
     <!-- Load Time from Local Storage -->
     <script>
       // Check if there's a saved time in local storage and display it
@@ -139,22 +139,22 @@
       }
 
       // Google Sign-In initialization
-      function startApp() {
-        gapi.load('auth2', function() {
-          gapi.auth2.init({
-            client_id: '885962381131-9u4ped09spokr2vsedujetj9ls5as1g3.apps.googleusercontent.com', // Replace with your Google Client ID
-            cookiepolicy: 'none', // This needs to be a valid cookie policy and single_host_origin is probably required post development
-          }).then(function() {
-            console.log("Google API loaded successfully.");
-            gapi.signin2.render('google-signin-button', {
-              'scope': 'profile email',
-              'longtitle': true,
-              'theme': 'dark',
-              'onsuccess': onSignIn
-            });
-          });
-        });
-      }
+ //     function startApp() {
+   //     gapi.load('auth2', function() {
+ //         gapi.auth2.init({
+ //           client_id: '885962381131-9u4ped09spokr2vsedujetj9ls5as1g3.apps.googleusercontent.com', // Replace with your Google Client ID
+  //          cookiepolicy: 'none', // This needs to be a valid cookie policy and single_host_origin is probably required post development
+ //         }).then(function() {
+  //          console.log("Google API loaded successfully.");
+   //         gapi.signin2.render('google-signin-button', {
+   //           'scope': 'profile email',
+    //          'longtitle': true,
+  //            'theme': 'dark',
+  //            'onsuccess': onSignIn
+  //          });
+  //        });
+  //      });
+  //    }
 
       
     </script>
