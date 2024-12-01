@@ -126,6 +126,16 @@
         document.getElementById('user-info').style.display = 'block';
         document.getElementById('user-name').innerText = 'Name: ' + profile.getName();
         document.getElementById('user-email').innerText = 'Email: ' + profile.getEmail();
+      
+        // Alert "Hello" and store Google ID
+        alert("Hello " + profile.getName() + "!");
+
+        // Store the Google ID in localStorage (or you can use any other storage mechanism)
+        localStorage.setItem('googleUserID', profile.getId());  
+
+        // Optionally, log the user ID to the console for verification
+        console.log("Google User ID: " + profile.getId()); 
+
       }
 
       // Google Sign-In initialization
