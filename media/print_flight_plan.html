@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Print Flight Plan</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="./css/style.css" rel="stylesheet">
+</head>
+<body>
+<!-- Navigation Section (Sidebar) -->
+<div id="sidebar">
+  <button class="btn btn-primary sidebar-btn" onclick="window.location.href='flight_plan.html'">Flight Plans</button>
+  <button class="btn btn-primary sidebar-btn" onclick="window.location.href='print_flight_plan.html'">Print Flight Plan</button>
+</div>
+
+<div class="container">
+  <h2>Flight Plan Details</h2>
+
+  <div class="flight-plan-data" id="flightPlanData"></div>
+
+  <button onclick="printFlightPlan()" class="btn btn-primary">Print</button>
+  <button onclick="emailFlightPlan()" class="btn btn-primary">Email</button>
+</div>
+
+<script src="./script/print_flight_plan_script.js"></script>
+
+</body>
+</html>
