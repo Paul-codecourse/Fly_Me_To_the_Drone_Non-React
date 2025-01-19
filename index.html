@@ -3,8 +3,30 @@
     <head>
         <meta charset="UTF-8" />
         <title>Netlify Deploy</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  body {
+    background: linear-gradient(to bottom, #add8e6, #00008b);
+    color: #00008b; /* Dark blue text */
+    padding: 20px;
+    border-right: 1px solid #dee2e6;
+  }
+  .sidebar-btn {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  .container {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+  }
+  p .btn-dark {
+ font-color: rgba(000, 000, 000, 0);
+  }
+</style>
     </head>
     <body>
+        <div class="container">
         <p>
             <h1>Welcome to the Netlify deployed homepage for this Repo</h1>
         </p>
@@ -15,11 +37,35 @@
             <a href="./media/index starting point.html">Index starting point</a>
         </p>
         <p>
-            <p><a href="./media/indexnew.html">Index New</a><br /></p>
-            <p><a href="./media/preflightchecklist.html">Preflight checklist</a><br /></p>
-            <p><a href="./media//index.html">Original Index</a><br /></p>
-            <p><a href="./media/index starting point.html">Index starting point</a></p>
-            <p><a href="./media/TestingGoogleResponse.html">Testing Response with JWT Decode</a></p>
+            <p><button> <a href="https://resilient-manatee-225bb7.netlify.app">Link to the deployed Netlify Website</a></button><br /></p>
+            <p><button> <a href="./media/indexnew.html">Index New</a></button><br /></p>
+            <p><button><a href="./media/preflightchecklist.html">Preflight checklist</a></button><br /></p>
+            <p><button><a href="./media//index.html">Original Index</a></button><br /></p>
+            <p><button class="btn btn-light"><a href="./media/index starting point.html">Index starting point</a></button></p>
+            <p><button class="btn btn-dark"><a href="./media/TestingGoogleResponse.html">Testing Response with JWT Decode</a></button></p>
+        </p>
+        </div>
+        <p>
+            <h3>Potential button styles</h3>
+            <button class="btn btn-primary">Primary</button>
+            <button class="btn btn-secondary">Secondary</button>
+            <button class="btn btn-success">Success</button>
+            <button class="btn btn-danger">Danger</button>
+            <button class="btn btn-warning">Warning</button>
+            <button class="btn btn-info">Info</button>
+            <button class="btn btn-light">Light</button>
+            <button class="btn btn-dark">Dark</button>
+            <button class="btn btn-link">Link</button>
+
+        </p>
+        <p>
+            <button class="btn btn-primary">Primary</button>
+<button class="btn btn-secondary">Secondary</button>
+<button class="btn btn-outline-success">Outline Success</button>
+<button class="btn btn-danger btn-sm">Small Danger</button>
+<button class="btn btn-warning btn-lg">Large Warning</button>
+<button class="btn btn-link">Link Style Button</button>
+
         </p>
     </body>
 </html>
