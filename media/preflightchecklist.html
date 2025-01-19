@@ -6,12 +6,11 @@
   <title>Drone Preflight Checklist</title>
 
   <!-- Include the Google Identity Services (GIS) client script -->
- <!--<script src="https://accounts.google.com/gsi/client" async defer></script>-->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <style>
-    /* Your styles remain the same */
     body {
-      background: linear-gradient(135deg, #1e3c72, #2a5298); /* Blue metallic gradient */
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
       color: white;
       font-family: Arial, sans-serif;
       padding: 20px;
@@ -63,7 +62,6 @@
       margin-top: 20px;
     }
 
-    /* Google Sign-In Button */
     .gsi-button {
       margin-top: 20px;
       font-size: 16px;
@@ -85,20 +83,20 @@
 
   <!-- Google Sign-In Button -->
   <div id="google-signin-button"></div>
-  
+
   <!-- Welcome Message -->
   <div id="welcome-message" class="welcome-message" style="display: none;"></div>
 
   <!-- Preflight Checklist -->
   <div id="checklist" class="checklist" style="display: none;">
     <h3>Preflight Checklist:</h3>
-    <p><input type="checkbox" id="battery" /> Check battery charge</p>
-    <p><input type="checkbox" id="propellers" /> Inspect propellers</p>
-    <p><input type="checkbox" id="gps" /> Check GPS signal</p>
-    <p><input type="checkbox" id="camera" /> Verify camera settings</p>
-    <p><input type="checkbox" id="weather" /> Check weather conditions</p>
-    <p><input type="checkbox" id="flight-plan" /> Review flight plan</p>
-    <p><input type="checkbox" id="control" /> Test remote control</p>
+    <p><input type="checkbox" id="battery" aria-label="Check battery charge" /> Check battery charge</p>
+    <p><input type="checkbox" id="propellers" aria-label="Inspect propellers" /> Inspect propellers</p>
+    <p><input type="checkbox" id="gps" aria-label="Check GPS signal" /> Check GPS signal</p>
+    <p><input type="checkbox" id="camera" aria-label="Verify camera settings" /> Verify camera settings</p>
+    <p><input type="checkbox" id="weather" aria-label="Check weather conditions" /> Check weather conditions</p>
+    <p><input type="checkbox" id="flight-plan" aria-label="Review flight plan" /> Review flight plan</p>
+    <p><input type="checkbox" id="control" aria-label="Test remote control" /> Test remote control</p>
     <button class="btn-custom" onclick="submitChecklist()">Submit Checklist</button>
   </div>
 
@@ -108,10 +106,9 @@
     <button onclick="searchData()">Search</button>
     <p id="search-result"></p>
   </div>
-
 </div>
 
-<!--script>
+<script>
   let userName = '';
   let userEmail = '';
 
@@ -134,7 +131,7 @@
   // Initialize the Google Identity Services library
   function initializeGSI() {
     google.accounts.id.initialize({
-      client_id: '885962381131-9u4ped09spokr2vsedujetj9ls5as1g3.apps.googleusercontent.com', // Replace with your actual Google Client ID
+      client_id: 'YOUR_GOOGLE_CLIENT_ID', // Replace with your actual Google Client ID
       callback: handleCredentialResponse
     });
 
@@ -166,6 +163,8 @@
       control: document.getElementById('control').checked
     };
 
+    // Save checklist data to localStorage
+    localStorage.setItem('checklistData', JSON.stringify(checklistData));
     console.log('Checklist submitted:', checklistData);
     alert('Checklist submitted!');
   }
@@ -194,7 +193,7 @@
     { date: '2024-10-28', location: 'Beach B', flightTime: '45 min' },
     { date: '2024-10-15', location: 'Field C', flightTime: '60 min' },
   ];
-</script>-->
+</script>
 
 </body>
 </html>
